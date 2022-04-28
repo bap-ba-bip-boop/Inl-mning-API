@@ -95,9 +95,8 @@ namespace Inlämning_API.Controllers
             if (ad == null)
                 return NotFound();
 
-            var patchData = new Advertisement();
-
-            adEntity.ApplyTo(patchData);
+            adEntity.ApplyTo(ad);
+            _context.SaveChanges();
 
             return NoContent();
         }
