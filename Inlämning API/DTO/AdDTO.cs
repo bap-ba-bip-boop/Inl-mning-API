@@ -2,7 +2,7 @@
 {
     public class AdDTO
     {
-        public string Title { get; set; }
-        public string fillerText { get; set; }
+        public string? Title { get; set; }
+        public string? fillerText { get; set; }
     }
 }
