@@ -1,5 +1,7 @@
 using Inlämning_API.Model;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +15,24 @@ builder.Services.AddDbContext<APIDbContext>(options =>
 );
 builder.Services.AddTransient<DataInitialize>();
 builder.Services.AddSwaggerGen();
+//================================================================
+var SecretKey = "312121312<znxmb4";
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = false,
+            ValidateAudience = false,
+            ValidateLifetime = false,
+            ValidateIssuerSigningKey = false,
+            ValidIssuer = Issuer,
+            ValidAudience = Issuer,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SecretKey))
+        };
+    });
+//================================================================
 
 var app = builder.Build();
 
@@ -30,6 +50,10 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//=========================
+app.UseCors("AllowAll");
+app.UseAuthentication();
+//=========================
 app.UseAuthorization();
 
 app.MapControllers();
