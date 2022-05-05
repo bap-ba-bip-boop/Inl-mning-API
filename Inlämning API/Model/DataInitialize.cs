@@ -23,7 +23,12 @@ namespace Inlämning_API.Model
             var compValue = title.ToLower();
             if (!_context.advertisements.Any(ad => ad.Title.ToLower() == compValue) )
             {
-                _context.advertisements.Add(new Advertisement { Title = title, fillerText = fillerText });
+                _context.advertisements.Add(
+                    new Advertisement {
+                        Title = title,
+                        fillerText = fillerText
+                    }
+                    );
                 _context.SaveChanges();
             }
         }
