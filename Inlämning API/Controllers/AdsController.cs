@@ -34,12 +34,13 @@ public class AdsController : ControllerBase
     [Route("{id}")]
     public IActionResult GetOne(int Id)
     {
-        var advertisement = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
-        return (advertisement == null) ?
-            NotFound() :
-            Ok(
-                _mapper.Map<AdDTO>(advertisement)
-            );
+        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
+        if (ad == null)
+            return NotFound();
+
+        return Ok(
+            _mapper.Map<AdDTO>(ad)
+        );
     }
     [Authorize]
     [HttpPost]
@@ -66,8 +67,8 @@ public class AdsController : ControllerBase
             return NotFound();
 
         _mapper.Map(ead, ad);
-
         _context.SaveChanges();
+
         return NoContent();
     }
     [Authorize]
