@@ -1,6 +1,7 @@
 using AutoMapper;
 using Inlämning_API.Infrastructure.Profiles;
 using Inlämning_API.Model;
+using Inlämning_API.Services;
 using Inlämning_API.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ _Services.AddDbContext<APIDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
 _Services.AddTransient<DataInitialize>();
+_Services.AddTransient<IAccountAPIService, AccountAPIService>();
 _Services.AddAutoMapper(typeof(AdsProfile));
 _Services.AddSwaggerGen();
 

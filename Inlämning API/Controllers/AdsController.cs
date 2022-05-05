@@ -1,9 +1,11 @@
 using AutoMapper;
 using Inlämning_API.DTO;
 using Inlämning_API.Model;
+using Inlämning_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using static Inlämning_API.Services.IAccountAPIService;
 
 namespace Inlämning_API.Controllers;
 
@@ -13,11 +15,13 @@ public class AdsController : ControllerBase
 {
     private readonly APIDbContext _context;
     private readonly IMapper _mapper;
+    private readonly IAccountAPIService _accService;
 
-    public AdsController(APIDbContext adc, IMapper mapper)
+    public AdsController(APIDbContext adc, IMapper mapper, IAccountAPIService aas)
     {
         _context = adc;
         _mapper = mapper;
+        _accService = aas;
     }
     [Authorize]
     [HttpGet]
@@ -34,13 +38,9 @@ public class AdsController : ControllerBase
     [Route("{id}")]
     public IActionResult GetOne(int Id)
     {
-        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
-        if (ad == null)
-            return NotFound();
+        var (status, ad) = _accService.VerifyAccountID(Id, _context);
 
-        return Ok(
-            _mapper.Map<AdDTO>(ad)
-        );
+        return (status == AccountStatus.AccountDoesNotExist) ? NotFound() : Ok( _mapper.Map<AdDTO>(ad) );
     }
     [Authorize]
     [HttpPost]
@@ -57,46 +57,56 @@ public class AdsController : ControllerBase
             _mapper.Map<AdDTO>(newAd)
             );
     }
+
+    private NotFoundResult NonSafeHTTPMEthodWrapper(Action action)
+    {
+        action();
+        _context.SaveChanges();
+        return NotFound();
+    }
+
     [Authorize]
     [HttpPut]
     [Route("{id}")]
     public IActionResult EditAdvertisement(int Id, EditAdDTO ead)
     {
-        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
-        if (ad == null)
-            return NotFound();
-
-        _mapper.Map(ead, ad);
-        _context.SaveChanges();
-
-        return NoContent();
+        var (status, ad) = _accService.VerifyAccountID(Id, _context);
+        return (status == AccountStatus.AccountDoesNotExist) ?
+            NotFound() :
+            NonSafeHTTPMEthodWrapper(
+            ()=>
+            {
+                _mapper.Map(ead, ad);
+            }
+        );
     }
     [Authorize]
     [HttpDelete]
     [Route("{id}")]
     public IActionResult RemoveAdvertisement(int Id)
     {
-        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
-        if (ad == null)
-            return NotFound();
-
-        _context.advertisements!.Remove(ad);
-        _context.SaveChanges();
-
-        return NoContent();
+        var (status, ad) = _accService.VerifyAccountID(Id, _context);
+        return (status == AccountStatus.AccountDoesNotExist) ?
+            NotFound() :
+            NonSafeHTTPMEthodWrapper( ()=>
+            {
+                _context.advertisements!.Remove(ad);
+            }
+        );
     }
     [Authorize]
     [HttpPatch]
     [Route("{id}")]
     public IActionResult PartialUpdateAdvertisement(int Id, [FromBody] JsonPatchDocument<Advertisement> adEntity)
     {
-        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
-        if (ad == null)
-            return NotFound();
-
-        adEntity.ApplyTo(ad);
-        _context.SaveChanges();
-
-        return NoContent();
+        var (status, ad) = _accService.VerifyAccountID(Id, _context);
+        return (status == AccountStatus.AccountDoesNotExist) ?
+            NotFound() :
+            NonSafeHTTPMEthodWrapper(
+            ()=>
+            {
+                adEntity.ApplyTo(ad);
+            }
+        );
     }
 }
