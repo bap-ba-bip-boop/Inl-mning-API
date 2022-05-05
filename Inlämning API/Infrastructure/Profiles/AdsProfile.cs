@@ -8,7 +8,6 @@ public class AdsProfile : Profile
 {
     public AdsProfile()
     {
-        //CreateMap<AdItemsDTO, Advertisement>();
         CreateMap<Advertisement, AdItemsDTO>();
         CreateMap<Advertisement, AdDTO>();
         CreateMap<CreateAdDTO, Advertisement>();

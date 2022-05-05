@@ -4,7 +4,6 @@ using Inlämning_API.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace Inlämning_API.Controllers;
 

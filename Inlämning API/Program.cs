@@ -22,15 +22,15 @@ _Services.AddTransient<DataInitialize>();
 _Services.AddAutoMapper(typeof(AdsProfile));
 _Services.AddSwaggerGen();
 
-{ 
+{
     var _mapper = new Mapper(
-        new MapperConfiguration(cfg => 
+        new MapperConfiguration(cfg =>
             {
                 cfg.AddProfile(new JwtSettingsProfile());
             }
         )
-    ); 
-    
+    );
+
     _Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(options =>
         {
