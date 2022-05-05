@@ -12,7 +12,7 @@ public class JwtSettingsProfile : Profile
         CreateMap<JwtSettings, TokenValidationParameters>()
             .ForMember(
                 src => src.IssuerSigningKey,
-                opt => opt.MapFrom(src => new SymmetricSecurityKey(Encoding.UTF8.GetBytes(src.Key)))
+                opt => opt.MapFrom(src => new SymmetricSecurityKey(Encoding.UTF8.GetBytes(src.Key!)))
             );
     }
 }

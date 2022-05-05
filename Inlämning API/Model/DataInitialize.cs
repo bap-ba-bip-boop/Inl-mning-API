@@ -21,9 +21,9 @@ public class DataInitialize
     private void CreateIfNotExists(string title, string fillerText)
     {
         var compValue = title.ToLower();
-        if (!_context.advertisements.Any(ad => ad.Title.ToLower() == compValue))
+        if (!_context.advertisements!.Any(ad => ad.Title!.ToLower() == compValue))
         {
-            _context.advertisements.Add(
+            _context.advertisements!.Add(
                 new Advertisement
                 {
                     Title = title,

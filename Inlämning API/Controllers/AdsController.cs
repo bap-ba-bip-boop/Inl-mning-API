@@ -25,7 +25,7 @@ public class AdsController : ControllerBase
     public IActionResult Index()
     {
         return Ok(
-            _context.advertisements.Select(ad =>
+            _context.advertisements!.Select(ad =>
                 _mapper.Map<AdItemsDTO>(ad)
             ).ToList()
         );
@@ -35,7 +35,7 @@ public class AdsController : ControllerBase
     [Route("{id}")]
     public IActionResult GetOne(int Id)
     {
-        var advertisement = _context.advertisements.FirstOrDefault(ad => ad.Id == Id);
+        var advertisement = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
         return (advertisement == null) ?
             NotFound() :
             Ok(
@@ -48,7 +48,7 @@ public class AdsController : ControllerBase
     {
         var newAd = _mapper.Map<Advertisement>(cad);
 
-        _context.advertisements.Add(newAd);
+        _context.advertisements!.Add(newAd);
         _context.SaveChanges();
 
         return CreatedAtAction(
@@ -62,7 +62,7 @@ public class AdsController : ControllerBase
     [Route("{id}")]
     public IActionResult EditAdvertisement(int Id, EditAdDTO ead)
     {
-        var ad = _context.advertisements.FirstOrDefault(ad => ad.Id == Id);
+        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
         if (ad == null)
             return NotFound();
 
@@ -76,11 +76,11 @@ public class AdsController : ControllerBase
     [Route("{id}")]
     public IActionResult RemoveAdvertisement(int Id)
     {
-        var ad = _context.advertisements.FirstOrDefault(ad => ad.Id == Id);
+        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
         if (ad == null)
             return NotFound();
 
-        _context.advertisements.Remove(ad);
+        _context.advertisements!.Remove(ad);
         _context.SaveChanges();
 
         return NoContent();
@@ -90,7 +90,7 @@ public class AdsController : ControllerBase
     [Route("{id}")]
     public IActionResult PartialUpdateAdvertisement(int Id, [FromBody] JsonPatchDocument<Advertisement> adEntity)
     {
-        var ad = _context.advertisements.FirstOrDefault(ad => ad.Id == Id);
+        var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
         if (ad == null)
             return NotFound();
 
