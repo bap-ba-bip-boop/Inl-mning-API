@@ -14,11 +14,22 @@ namespace Inlämning_API.Model
         public void SeedData()
         {
             _context.Database.Migrate();
-            CreateIfNotExists("Köp Falukorv", "Falukorv är gott");
-            CreateIfNotExists("Skaffa AdBlock", "Ads är inte roligt");
+            CreateAdvertisementIfNotExists("Köp Falukorv", "Falukorv är gott");
+            CreateAdvertisementIfNotExists("Skaffa AdBlock", "Ads är inte roligt");
+            CreateUserIfNotExists("admin@abc.com", "$admin@2022");
         }
 
-        private void CreateIfNotExists(string title, string fillerText)
+        private void CreateUserIfNotExists(string username, string password)
+        {
+            var compValue = username.ToLower();
+            if (!_context.users.Any(user => user.Email.ToLower() == compValue))
+            {
+                _context.users.Add(new UserInfo { Email = username, Password = password, CreatedDate = DateTime.Now, DisplayName = "testAdmin", UserName = "testAdmin" });
+                _context.SaveChanges();
+            }
+        }
+
+        private void CreateAdvertisementIfNotExists(string title, string fillerText)
         {
             var compValue = title.ToLower();
             if (!_context.advertisements.Any(ad => ad.Title.ToLower() == compValue) )
