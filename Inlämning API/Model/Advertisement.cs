@@ -1,9 +1,8 @@
-namespace Inlämning_API
+namespace Inlämning_API.Model;
+
+public class Advertisement
 {
-    public class Advertisement
-    {
-        public int Id { get; set; }
-        public string? Title { get; set; }
-        public string? fillerText { get; set; }
-    }
+    public int Id { get; set; }
+    public string? Title { get; set; }
+    public string? FillerText { get; set; }
 }

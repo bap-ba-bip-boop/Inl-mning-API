@@ -1,8 +1,7 @@
-﻿namespace Inlämning_API.DTO
+﻿namespace Inlämning_API.DTO;
+
+public class CreateAdDTO
 {
-    public class CreateAdDTO
-    {
-        public string? Title { get; set; }
-        public string? fillerText { get; set; }
-    }
+    public string? Title { get; set; }
+    public string? FillerText { get; set; }
 }

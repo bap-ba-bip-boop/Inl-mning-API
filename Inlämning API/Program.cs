@@ -1,18 +1,44 @@
-using Inlämning_API.Model;
+using Inl�mning_API.Infrastructure.Profiles;
+using Inl�mning_API.Model;
+using Inl�mning_API.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var _Config = builder.Configuration;
+var _Services = builder.Services;
 
-// Add services to the container.
+var jwtSettings = _Config.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+var connectionString = _Config.GetConnectionString("DefaultConnection");
 
-builder.Services.AddControllers().AddNewtonsoftJson();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<APIDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+_Services.AddControllers().AddNewtonsoftJson();
+_Services.AddEndpointsApiExplorer();
+_Services.AddDbContext<APIDbContext>(options =>
+    options.UseSqlServer(connectionString)
 );
-builder.Services.AddTransient<DataInitialize>();
-builder.Services.AddSwaggerGen();
+_Services.AddTransient<DataInitialize>();
+_Services.AddAutoMapper(typeof(AdsProfile));
+_Services.AddAutoMapper(typeof(JwtSettings));
+_Services.AddSwaggerGen();
+
+//==================================================
+_Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = jwtSettings.ValidateIssuer,
+            ValidateAudience = jwtSettings.ValidateAudience,
+            ValidateLifetime = jwtSettings.ValidateLifetime,
+            ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
+            ValidIssuer = jwtSettings.ValidIssuer,
+            ValidAudience = jwtSettings.ValidAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+        };
+    });
+//==================================================
 
 var app = builder.Build();
 
@@ -21,7 +47,6 @@ using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetService<DataInitialize>().SeedData();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,7 +55,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//==================================================
+app.UseCors("AllowAll");
+app.UseAuthentication();
 app.UseAuthorization();
+//==================================================
 
 app.MapControllers();
 
