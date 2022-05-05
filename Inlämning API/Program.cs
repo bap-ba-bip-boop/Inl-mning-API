@@ -1,4 +1,3 @@
-using AutoMapper;
 using Inlämning_API.Infrastructure.Profiles;
 using Inlämning_API.Model;
 using Inlämning_API.Settings;
@@ -8,30 +7,27 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+var _Config = builder.Configuration;
+var _Services = builder.Services;
 
-var jwtSettings = builder.Configuration.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+var jwtSettings = _Config.GetSection(nameof(JwtSettings)).Get<JwtSettings>();
+var connectionString = _Config.GetConnectionString("DefaultConnection");
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-
-// Add services to the container.
-
-builder.Services.AddControllers().AddNewtonsoftJson();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDbContext<APIDbContext>(options =>
+_Services.AddControllers().AddNewtonsoftJson();
+_Services.AddEndpointsApiExplorer();
+_Services.AddDbContext<APIDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
-builder.Services.AddTransient<DataInitialize>();
-builder.Services.AddAutoMapper(typeof(AdsProfile));
-builder.Services.AddAutoMapper(typeof(JwtSettings));
-builder.Services.AddSwaggerGen();
+_Services.AddTransient<DataInitialize>();
+_Services.AddAutoMapper(typeof(AdsProfile));
+_Services.AddAutoMapper(typeof(JwtSettings));
+_Services.AddSwaggerGen();
 
 //==================================================
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+_Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        options.TokenValidationParameters = //_mapper.Map<TokenValidationParameters>(jwtSettings);
-        new TokenValidationParameters // kanske kan använda automapper?
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = jwtSettings.ValidateIssuer,
             ValidateAudience = jwtSettings.ValidateAudience,
@@ -39,7 +35,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = jwtSettings.ValidateIssuerSigningKey,
             ValidIssuer = jwtSettings.ValidIssuer,
             ValidAudience = jwtSettings.ValidAudience,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes( jwtSettings.Key ))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
         };
     });
 //==================================================
@@ -51,7 +47,6 @@ using (var scope = app.Services.CreateScope())
     scope.ServiceProvider.GetService<DataInitialize>().SeedData();
 }
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

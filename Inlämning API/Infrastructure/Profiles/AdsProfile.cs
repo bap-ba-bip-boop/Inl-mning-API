@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Inlämning_API.DTO;
+using Inlämning_API.Model;
 
 namespace Inlämning_API.Infrastructure.Profiles;
 
