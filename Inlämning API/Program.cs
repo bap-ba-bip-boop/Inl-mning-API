@@ -1,6 +1,6 @@
-using Inlämning_API.Infrastructure.Profiles;
-using Inlämning_API.Model;
-using Inlämning_API.Settings;
+using Inlï¿½mning_API.Infrastructure.Profiles;
+using Inlï¿½mning_API.Model;
+using Inlï¿½mning_API.Settings;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
