@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using SharedResources.Services.ICreateUniqeService;
+using static SharedResources.Services.ICreateUniqeService;
 
 namespace SharedResources.Services;
 
 public class CreateUniqeService : ICreateUniqeService
 {
-    public CreateUniqueStatus CreateIfNotExists<S>(DbSet<S>set, Func<S,bool> compareFunc, S ItemToAdd) where S : class
+    public CreateUniqueStatus CreateIfNotExists<S>(DbContext _dbContext, DbSet<S>set, Func<S,bool> compareFunc, S ItemToAdd) where S : class
     {
         if ( set.Any(compareFunc) )
             return CreateUniqueStatus.AlreadyExists;
