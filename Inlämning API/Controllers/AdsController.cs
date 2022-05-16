@@ -5,7 +5,7 @@ using Inlämning_API.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using static Inlämning_API.Services.IAccountAPIService;
+using static Inlämning_API.Services.IAdAPIService;
 
 namespace Inlämning_API.Controllers;
 
@@ -15,9 +15,9 @@ public class AdsController : ControllerBase
 {
     private readonly APIDbContext _context;
     private readonly IMapper _mapper;
-    private readonly IAccountAPIService _accService;
+    private readonly IAdAPIService _accService;
 
-    public AdsController(APIDbContext adc, IMapper mapper, IAccountAPIService aas)
+    public AdsController(APIDbContext adc, IMapper mapper, IAdAPIService aas)
     {
         _context = adc;
         _mapper = mapper;
@@ -40,7 +40,7 @@ public class AdsController : ControllerBase
     {
         var (status, ad) = _accService.VerifyAccountID(Id, _context);
 
-        return (status == AccountStatus.AccountDoesNotExist) ? NotFound() : Ok( _mapper.Map<AdDTO>(ad) );
+        return (status == AdAPIStatus.AdDoesNotExist) ? NotFound() : Ok( _mapper.Map<AdDTO>(ad) );
     }
     [Authorize]
     [HttpPost]
@@ -71,7 +71,7 @@ public class AdsController : ControllerBase
     public IActionResult EditAdvertisement(int Id, EditAdDTO ead)
     {
         var (status, ad) = _accService.VerifyAccountID(Id, _context);
-        return (status == AccountStatus.AccountDoesNotExist) ?
+        return (status == AdAPIStatus.AdDoesNotExist) ?
             NotFound() :
             NonSafeHTTPMEthodWrapper(
             ()=>
@@ -86,7 +86,7 @@ public class AdsController : ControllerBase
     public IActionResult RemoveAdvertisement(int Id)
     {
         var (status, ad) = _accService.VerifyAccountID(Id, _context);
-        return (status == AccountStatus.AccountDoesNotExist) ?
+        return (status == AdAPIStatus.AdDoesNotExist) ?
             NotFound() :
             NonSafeHTTPMEthodWrapper( ()=>
             {
@@ -100,7 +100,7 @@ public class AdsController : ControllerBase
     public IActionResult PartialUpdateAdvertisement(int Id, [FromBody] JsonPatchDocument<Advertisement> adEntity)
     {
         var (status, ad) = _accService.VerifyAccountID(Id, _context);
-        return (status == AccountStatus.AccountDoesNotExist) ?
+        return (status == AdAPIStatus.AdDoesNotExist) ?
             NotFound() :
             NonSafeHTTPMEthodWrapper(
             ()=>

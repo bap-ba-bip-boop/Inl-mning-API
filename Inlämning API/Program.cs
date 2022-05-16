@@ -20,7 +20,7 @@ _Services.AddDbContext<APIDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
 _Services.AddTransient<DataInitialize>();
-_Services.AddTransient<IAccountAPIService, AccountAPIService>();
+_Services.AddTransient<IAdAPIService, AdAPIService>();
 _Services.AddAutoMapper(typeof(AdsProfile));
 _Services.AddSwaggerGen();
 

@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Inlämning API\Inlämning API.csproj" />
+    <ProjectReference Include="..\SharedResources\SharedResources.csproj" />
   </ItemGroup>
 
 </Project>
