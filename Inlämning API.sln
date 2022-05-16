@@ -5,6 +5,10 @@ VisualStudioVersion = 17.1.32210.238
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inlämning API", "Inlämning API\Inlämning API.csproj", "{5567EFDC-785E-42DB-B0B5-3253DD88072D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SystemTests", "SystemTests\SystemTests.csproj", "{497AE65F-5138-4124-BCDD-BC31404E97F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedResources", "SharedResources\SharedResources.csproj", "{E90175BD-2037-4CC9-B31F-B91F25C97CF3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{5567EFDC-785E-42DB-B0B5-3253DD88072D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5567EFDC-785E-42DB-B0B5-3253DD88072D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5567EFDC-785E-42DB-B0B5-3253DD88072D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{497AE65F-5138-4124-BCDD-BC31404E97F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{497AE65F-5138-4124-BCDD-BC31404E97F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{497AE65F-5138-4124-BCDD-BC31404E97F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{497AE65F-5138-4124-BCDD-BC31404E97F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E90175BD-2037-4CC9-B31F-B91F25C97CF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E90175BD-2037-4CC9-B31F-B91F25C97CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E90175BD-2037-4CC9-B31F-B91F25C97CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E90175BD-2037-4CC9-B31F-B91F25C97CF3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
