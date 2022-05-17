@@ -19,17 +19,17 @@ _Services.AddEndpointsApiExplorer();
 _Services.AddDbContext<APIDbContext>(options =>
     options.UseSqlServer(connectionString)
 );
-_Services.AddTransient<DataInitialize>();
-_Services.AddTransient<IAdAPIService, AdAPIService>();
+_Services
+    .AddTransient<DataInitialize>()
+    .AddTransient<IAdAPIService, AdAPIService>();
+
 _Services.AddAutoMapper(typeof(AdsProfile));
 _Services.AddSwaggerGen();
 
 {
     var _mapper = new Mapper(
-        new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile(new JwtSettingsProfile());
-            }
+        new MapperConfiguration(cfg => 
+            cfg.AddProfile(new JwtSettingsProfile())
         )
     );
 

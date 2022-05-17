@@ -22,8 +22,8 @@ public class CreateUniqueServiceTest
         _context = new APIDbContext(options);
         _sut = new CreateUniqeService();
 
-        testTitle= "Köp Falukorv";
-        testText="Falukorv är gott";
+        testTitle= Guid.NewGuid().ToString();
+        testText = Guid.NewGuid().ToString();
 
         _ = addAdvertisement(testTitle, testText);
 
@@ -32,7 +32,7 @@ public class CreateUniqueServiceTest
         _sut.CreateIfNotExists(
             _context,
             _context.advertisements!,
-            item => item.Title == title,
+            item => item.Title.Equals(title),
             new Advertisement{
                 Title=title,
                 FillerText=text
@@ -55,8 +55,8 @@ public class CreateUniqueServiceTest
     public void When_Ad_Dont_Exists_Should_Return_Ok()
     {
         //Arrange
-        var title = testTitle + "1";
-        var text = testText + "1";
+        var title = Guid.NewGuid().ToString();
+        var text = Guid.NewGuid().ToString();
 
         //Act
         var returnStatus = addAdvertisement(title, text);

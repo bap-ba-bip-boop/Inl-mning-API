@@ -10,6 +10,7 @@ namespace SystemTests.Inlämning_API.Services;
 [TestClass]
 public class AdAPIServiceTest
 {
+
     private readonly APIDbContext _context;
     private readonly AdAPIService _sut;
     private readonly ICreateUniqeService _creator;
@@ -22,8 +23,8 @@ public class AdAPIServiceTest
 
         _creator = new CreateUniqeService();
 
-        addAdvertisement("Köp Falukorv", "Falukorv är gott");
-        addAdvertisement("Skaffa AdBlock", "Ads är inte roligt");
+        addAdvertisement(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
+        addAdvertisement(Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
 
         _sut = new AdAPIService();
     }
@@ -31,7 +32,7 @@ public class AdAPIServiceTest
         _creator.CreateIfNotExists(
             _context,
             _context.advertisements!,
-            item => item.Title == title,
+            item => item.Title.Equals(title),
             new Advertisement{
                 Title=title,
                 FillerText=text
@@ -66,6 +67,5 @@ public class AdAPIServiceTest
 
         //Assert
         Assert.IsTrue(returnStatus == AdAPIStatus.AdDoesNotExist);
-        Assert.IsTrue(returnAd == null);
     }
 }

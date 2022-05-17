@@ -8,6 +8,6 @@ public class AdAPIService : IAdAPIService
     public (AdAPIStatus, Advertisement) VerifyAccountID(int Id, APIDbContext _context)
     {
         var ad = _context.advertisements!.FirstOrDefault(ad => ad.Id == Id);
-        return ( (ad == null)? AdAPIStatus.AdDoesNotExist : AdAPIStatus.AdExists, ad )!;
+        return ( (ad == default)? AdAPIStatus.AdDoesNotExist : AdAPIStatus.AdExists, ad )!;
     }
 }

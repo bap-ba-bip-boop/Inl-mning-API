@@ -33,8 +33,8 @@ public class AdsController : ControllerBase
             ).ToList()
         );
     }
-    [HttpGet]
     [Authorize]
+    [HttpGet]
     [Route("{id}")]
     public IActionResult GetOne(int Id)
     {
@@ -58,11 +58,11 @@ public class AdsController : ControllerBase
             );
     }
 
-    private NotFoundResult NonSafeHTTPMEthodWrapper(Action action)
+    private NoContentResult NonSafeHTTPMEthodWrapper(Action action)
     {
         action();
         _context.SaveChanges();
-        return NotFound();
+        return NoContent();//NotFound();
     }
 
     [Authorize]
