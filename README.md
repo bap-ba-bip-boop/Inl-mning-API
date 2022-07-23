@@ -1,4 +1,4 @@
-# Inl-mning-API
+# API inlämning
 
 A restful API that handles "Ads" made for an assignment
 
