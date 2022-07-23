@@ -8,7 +8,7 @@ Migrated values to the settings file for fun.
 
 Written in .Net6 and tested manually with postman
 
-Keywords:
+**Keywords:**
 - SQL Database
 - .Net 6
 - Restful API
